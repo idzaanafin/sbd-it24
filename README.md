@@ -1,1 +1,2 @@
-# sbd-it24 - Praktikum
+# Sistem Basis Data - Praktikum
+Ahmad Idza Anafin - 5027241017
