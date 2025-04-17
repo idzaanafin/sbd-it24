@@ -1,0 +1,76 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1deb3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Apr 16, 2025 at 04:12 PM
+-- Server version: 10.11.11-MariaDB-0ubuntu0.24.04.2
+-- PHP Version: 8.3.6
+
+--
+-- Database: `FRD-017`
+--
+CREATE DATABASE IF NOT EXISTS `FRD-017`;
+USE `FRD-017`;
+--
+-- Table structure for table `AKUN`
+--
+
+CREATE TABLE IF NOT EXISTS `AKUN` (
+  `ID_AKUN` int AUTO_INCREMENT PRIMARY KEY,
+  `NAMA_AKUN` varchar(50) NOT NULL UNIQUE,
+  `NO_TELEPON` varchar(13) NOT NULL UNIQUE,
+  `EMAIL` varchar(50) NOT NULL UNIQUE,
+  `PASSWORD` varchar(50) NOT NULL
+);
+
+--
+-- Table structure for table `DRIVER`
+--
+
+CREATE TABLE IF NOT EXISTS `DRIVER` (
+  `ID_DRIVER` int AUTO_INCREMENT PRIMARY KEY,
+  `NAMA_DRIVER` varchar(50) NOT NULL,
+  `PLAT_KENDARAAN` varchar(10) NOT NULL UNIQUE,
+  `RATING_DRIVER` decimal(3,2) CHECK (`RATING_DRIVER` between 1.00 and 5.00)
+);
+
+--
+-- Table structure for table `MERCHANT`
+--
+
+CREATE TABLE IF NOT EXISTS `MERCHANT` (
+  `ID_MERCHANT` int AUTO_INCREMENT PRIMARY KEY,
+  `NAMA_MERCHANT` varchar(50) NOT NULL,
+  `RATING_MERCHANT` decimal(3,2) CHECK (`RATING_MERCHANT` between 1.00 and 5.00),
+  `LOKASI_MERCHANT` TEXT NOT NULL
+);
+
+--
+-- Table structure for table `PESANAN`
+--
+
+CREATE TABLE IF NOT EXISTS `PESANAN` (
+  `ID_PESANAN` int AUTO_INCREMENT PRIMARY KEY,
+  `ID_AKUN` int NOT NULL,
+  `ID_MERCHANT` int NOT NULL,
+  `ID_DRIVER` int NOT NULL,
+  `TANGGAL_PEMESANAN` date NOT NULL,
+
+  FOREIGN KEY (ID_AKUN) REFERENCES AKUN(ID_AKUN),
+  FOREIGN KEY (ID_MERCHANT) REFERENCES MERCHANT(ID_MERCHANT),
+  FOREIGN KEY (ID_DRIVER) REFERENCES DRIVER(ID_DRIVER)
+);
+
+--
+-- Table structure for table `PEMBAYARAN`
+--
+
+CREATE TABLE IF NOT EXISTS `PEMBAYARAN` (
+  `ID_PEMBAYARAN` int AUTO_INCREMENT PRIMARY KEY,
+  `ID_PESANAN` int UNIQUE NOT NULL,
+  `METODE_PEMBAYARAN` enum('Cash','IT Pay') NOT NULL,
+  `TOTAL` decimal(10,2) NOT NULL,
+
+  FOREIGN KEY (ID_PESANAN) REFERENCES PESANAN(ID_PESANAN)
+);
