@@ -109,6 +109,19 @@ JOIN Users ON Comments.user_id = Users.user_id
 JOIN Posts ON Comments.post_id = Posts.post_id;
 
 
+CREATE VIEW vw_post_summary AS
+SELECT 
+    Posts.post_id,
+    Posts.post_title,
+    Users.username AS author_name,
+    BlogCategories.category_name,
+    COUNT(Comments.comment_id) AS total_comments
+FROM Posts
+JOIN Users ON Posts.user_id = Users.user_id
+JOIN Post_Categories ON Posts.post_id = Post_Categories.post_id
+JOIN BlogCategories ON Post_Categories.category_id = BlogCategories.category_id
+LEFT JOIN Comments ON Posts.post_id = Comments.post_id
+GROUP BY Posts.post_id, Posts.post_title, Users.username, BlogCategories.category_name;
 
 
 CREATE VIEW vw_monthly_posts AS
